@@ -1,4 +1,6 @@
-public class Tile {
+import java.io.*;
+
+public class Tile implements Serializable{
     private int type; // 0: Skull, 1: Red, 2: Blue, 3: Green, 4: Yellow, 5: Gold, 6: Experience
 
     public Tile(int type) {

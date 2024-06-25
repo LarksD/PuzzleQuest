@@ -1,4 +1,6 @@
-public class Player {
+import java.io.*;
+
+public class Player implements Serializable{
     private String name;
     private int health;
     private int gold;
@@ -10,7 +12,7 @@ public class Player {
     }
 
     public void reset() {
-        this.health = 100;
+        this.health = 55;
         this.gold = 0;
         this.experience = 0;
     }

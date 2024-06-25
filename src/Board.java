@@ -1,6 +1,7 @@
 import java.util.Random;
+import java.io.*;
 
-public class Board {
+public class Board implements Serializable{
     private Tile[][] tiles;
     private Random random;
 

@@ -1,20 +1,15 @@
 import java.util.Scanner;
+import java.io.*;
 
-public class Game {
+public class Game implements Serializable {
     private Player player1;
     private Player player2;
     private Board board;
     private boolean firstTurn = true;
-
-    Scanner scanner = new Scanner(System.in);
+    private transient Scanner scanner;
 
     public Game() {
-        System.out.println("Digite o nome do jogador 1: ");
-        String player1name = scanner.nextLine();
-        player1 = new Player(player1name);
-        System.out.println("Digite o nome do jogador 2: ");
-        String player2name = scanner.nextLine();
-        player2 = new Player(player2name);
+        scanner = new Scanner(System.in);
         board = new Board();
     }
 
@@ -25,6 +20,7 @@ public class Game {
             System.out.println("3. Deletar Jogo Salvo");
             System.out.println("4. Sair");
             int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
             switch (choice) {
                 case 1:
                     newGame();
@@ -42,6 +38,14 @@ public class Game {
     }
 
     private void newGame() {
+        System.out.println("Digite o nome do jogador 1: ");
+        String player1name = scanner.nextLine();
+        player1 = new Player(player1name);
+
+        System.out.println("Digite o nome do jogador 2: ");
+        String player2name = scanner.nextLine();
+        player2 = new Player(player2name);
+
         player1.reset();
         player2.reset();
         board.initialize();
@@ -49,11 +53,35 @@ public class Game {
     }
 
     private void loadGame() {
-        // carregar jogo salvo
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("jogosalvo.dat"))) {
+            Game loadedGame = (Game) ois.readObject();
+            this.player1 = loadedGame.player1;
+            this.player2 = loadedGame.player2;
+            this.board = loadedGame.board;
+            System.out.println("Jogo carregado com sucesso.");
+            playGame();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Falha ao carregar jogo.");
+        }
     }
 
     private void deleteSavedGame() {
-        // apagar jogo salvo
+        File saveFile = new File("jogosalvo.dat");
+        if (saveFile.exists() && saveFile.delete()) {
+            System.out.println("Jogo salvo excluido com sucesso.");
+        } else {
+            System.out.println("Nenhum jogo salvo encontrado.");
+        }
+    }
+
+    private boolean saveGame() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("jogosalvo.dat"))) {
+            oos.writeObject(this);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private void playGame() {
@@ -87,12 +115,6 @@ public class Game {
             x = getRowIndex(rowInput);
             y = getColumnIndex(columnInput);
 
-            /*System.out.println("Row input: " + rowInput + ", Column input: " + columnInput);
-            System.out.println("Parsed coordinates: (" + x + ", " + y + ")");
-            System.out.println("Direction: " + direction);
-            */
-
-
             if (x != -1 && y != -1 && isValidMove(x, y, direction)) {
                 break;
             } else {
@@ -102,40 +124,43 @@ public class Game {
 
         makeMove(x, y, direction);
 
-        // Implementar a logica de pontuação e game over
+        if (saveGame()) {
+            System.out.println("Jogo salvo com sucesso.");
+        } else {
+            System.out.println("Falha ao salvar jogo.");
+        }
 
         if (board.lookForMatches()) {
             System.out.println("Trio Encontrado");
-            // Pontuação e quebra das pedrinhas
         }
 
         return checkGameOver(player);
     }
 
     private int getRowIndex(String rowInput) {
-    switch (Character.toLowerCase(rowInput.charAt(0))) {
-        case 'a': return 0;
-        case 'b': return 1;
-        case 'c': return 2;
-        case 'd': return 3;
-        case 'e': return 4;
-        case 'f': return 5;
-        case 'g': return 6;
-        case 'h': return 7;
-        default: return -1;
+        switch (Character.toLowerCase(rowInput.charAt(0))) {
+            case 'a': return 0;
+            case 'b': return 1;
+            case 'c': return 2;
+            case 'd': return 3;
+            case 'e': return 4;
+            case 'f': return 5;
+            case 'g': return 6;
+            case 'h': return 7;
+            default: return -1;
+        }
     }
-}
 
     private int getColumnIndex(String columnInput) {
         switch (columnInput) {
-           case "0": return 0;
-           case "1": return 1;
-           case "2": return 2;
-           case "3": return 3;
-           case "4": return 4;
-           case "5": return 5;
-           case "6": return 6;
-           case "7": return 7;
+            case "0": return 0;
+            case "1": return 1;
+            case "2": return 2;
+            case "3": return 3;
+            case "4": return 4;
+            case "5": return 5;
+            case "6": return 6;
+            case "7": return 7;
             default: return -1;
         }
     }
@@ -189,7 +214,7 @@ public class Game {
 
     private boolean checkGameOver(Player player) {
         if (player.getHealth() <= 0) {
-            System.out.println(player.getName() + " foi derotado!");
+            System.out.println(player.getName() + " foi derrotado!");
             return false;
         }
         return true;
