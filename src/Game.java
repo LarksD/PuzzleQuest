@@ -7,11 +7,14 @@ public class Game implements Serializable {
     private Board board;
     private boolean firstTurn = true;
     private transient Scanner scanner;
+    private boolean isPlayer1Turn;
 
     public Game() {
         scanner = new Scanner(System.in);
-        board = new Board();
+        board = new Board(this);
+        isPlayer1Turn = false;
     }
+
 
     public void showMenu() {
         while (true) {
@@ -52,6 +55,8 @@ public class Game implements Serializable {
         playGame();
     }
 
+
+
     private void loadGame() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("jogosalvo.dat"))) {
             Game loadedGame = (Game) ois.readObject();
@@ -84,6 +89,18 @@ public class Game implements Serializable {
         }
     }
 
+    public Player getCurrentPlayer() {
+        return isPlayer1Turn ? player1 : player2;
+    }
+
+    public Player getOpponent(Player currentPlayer) {
+        if (currentPlayer == player1) {
+            return player2;
+        } else {
+            return player1;
+        }
+    }
+
     private void playGame() {
         while (true) {
             if (firstTurn) {
@@ -99,6 +116,11 @@ public class Game implements Serializable {
 
     private boolean takeTurn(Player player) {
         System.out.println("Vez do " + player.getName());
+        System.out.println("Vida: " + player.getHealth());
+        System.out.println("Ouro: " + player.getGold());
+        System.out.println("Experiencia: " + player.getExperience());
+        System.out.println("Dano Duplo: " + (player.getDoubleDamage() ? "Sim" : "Não"));
+        System.out.println("Max Vida: " + player.getMaxHealth());
 
         int x = -1, y = -1;
         int direction;
@@ -124,15 +146,21 @@ public class Game implements Serializable {
 
         makeMove(x, y, direction);
 
-        if (saveGame()) {
-            System.out.println("Jogo salvo com sucesso.");
-        } else {
-            System.out.println("Falha ao salvar jogo.");
+
+
+        if (board.lookForMatches(true) != 0) {
+            System.out.println("combo!");
         }
 
         if (board.lookForMatches(false) == 2) { // acresentar turno
             System.out.println("Jogada Extra!");
             takeTurn(player);
+        }
+
+        if (saveGame()) {
+            System.out.println("Jogo salvo com sucesso.");
+        } else {
+            System.out.println("Falha ao salvar jogo.");
         }
 
         return checkGameOver(player);
