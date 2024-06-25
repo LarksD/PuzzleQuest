@@ -130,8 +130,9 @@ public class Game implements Serializable {
             System.out.println("Falha ao salvar jogo.");
         }
 
-        if (board.lookForMatches()) {
-            System.out.println("Trio Encontrado");
+        if (board.lookForMatches(false) == 2) { // acresentar turno
+            System.out.println("Jogada Extra!");
+            takeTurn(player);
         }
 
         return checkGameOver(player);

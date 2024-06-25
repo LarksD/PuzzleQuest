@@ -7,6 +7,10 @@ public class Tile implements Serializable{
         this.type = type;
     }
 
+    public int getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object obj) { //Override no metodo equals para comparar o tipo do objeto
         if (this == obj) return true;
