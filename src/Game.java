@@ -18,12 +18,19 @@ public class Game implements Serializable { //Serializable para que o jogo possa
 
     public void showMenu() {
         while (true) {
-            System.out.println("1. Jogo Novo");
-            System.out.println("2. Carregar Jogo");
-            System.out.println("3. Deletar Jogo Salvo");
-            System.out.println("4. Sair");
+            System.out.println("\n==============================");
+            System.out.println("        Puzzle Quest");
+            System.out.println("==============================");
+            System.out.println(" 1. 🆕 Jogo Novo");
+            System.out.println(" 2. 📂 Carregar Jogo");
+            System.out.println(" 3. 🗑️ Deletar Jogo Salvo");
+            System.out.println(" 4. 🚪 Sair");
+            System.out.println("==============================");
+            System.out.print("Escolha uma opção: ");
+
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
+
             switch (choice) {
                 case 1:
                     newGame();
@@ -35,10 +42,14 @@ public class Game implements Serializable { //Serializable para que o jogo possa
                     deleteSavedGame();
                     break;
                 case 4:
+                    System.out.println("Saindo do jogo. Até a próxima!");
                     System.exit(0);
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
             }
         }
     }
+
 
     private void newGame() {
         System.out.println("Digite o nome do jogador 1: ");
