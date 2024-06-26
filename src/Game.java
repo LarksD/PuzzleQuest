@@ -1,16 +1,16 @@
 import java.util.Scanner;
 import java.io.*;
 
-public class Game implements Serializable {
+public class Game implements Serializable { //Serializable para que o jogo possa ser salvo
     private Player player1;
     private Player player2;
     private Board board;
     private boolean firstTurn = true;
-    private transient Scanner scanner;
+    private transient Scanner scanner; //transient para que o scanner não seja serializado
     private boolean isPlayer1Turn;
 
     public Game() {
-        scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in); //inicializar o scanner pois ele não é serializado
         board = new Board(this);
         isPlayer1Turn = false;
     }
@@ -148,12 +148,14 @@ public class Game implements Serializable {
 
 
 
-        if (board.lookForMatches(true) != 0) {
+        int matchResult = board.lookForMatches(true); //salvar o retorno para fazer as próximas verificações
+        if (matchResult != 0) {
             System.out.println("combo!");
         }
 
-        if (board.lookForMatches(false) == 2) { // acresentar turno
+        if (matchResult == 2) { // acresentar turno
             System.out.println("Jogada Extra!");
+            System.out.println(board);
             takeTurn(player);
         }
 
@@ -194,7 +196,7 @@ public class Game implements Serializable {
         }
     }
 
-    private boolean isValidMove(int x, int y, int direction) {
+    private boolean isValidMove(int x, int y, int direction) { //verificar se o movimento é válido dentro do tabuleiro
         if (x < 0 || x >= 8 || y < 0 || y >= 8) {
             return false;
         }
@@ -224,7 +226,7 @@ public class Game implements Serializable {
         return true;
     }
 
-    private void makeMove(int x, int y, int direction) {
+    private void makeMove(int x, int y, int direction) { //fazer o movimento atraves de troca de peças
         switch (direction) {
             case 1:
                 board.swap(x, y, x - 1, y);

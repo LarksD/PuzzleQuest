@@ -20,7 +20,7 @@ public class Tile implements Serializable{
     }
 
     @Override
-    public String toString() {
+    public String toString() { //Override no metodo toString para retornar o emoji correspondente ao tipo
         switch (type) {
             case 0: return "💀";
             case 1: return "🔴";
