@@ -166,17 +166,17 @@ public class Game implements Serializable { //Serializable para que o jogo possa
 
         if (matchResult == 2) { // acresentar turno
             System.out.println("Jogada Extra!");
-            System.out.println(board);
+            System.out.println(board); //print o tabuleiro com as peças trocadas
             takeTurn(player);
         }
 
-        if (saveGame()) {
+        if (saveGame()) { // salvar o jogo a cada jogada
             System.out.println("Jogo salvo com sucesso.");
         } else {
             System.out.println("Falha ao salvar jogo.");
         }
 
-        return checkGameOver(player);
+        return checkGameOver(player); //verificar se o jogo acabou
     }
 
     private int getRowIndex(String rowInput) {
@@ -255,7 +255,8 @@ public class Game implements Serializable { //Serializable para que o jogo possa
     }
 
     private boolean checkGameOver(Player player) {
-        if (player.getHealth() <= 0) {
+        Player opponent = getOpponent(player);
+        if (player.getHealth() <= 0 || opponent.getHealth() <= 0) {   //verificar se a vida do jogador ou do oponente é menor ou igual a 0
             System.out.println(player.getName() + " foi derrotado!");
             return false;
         }
