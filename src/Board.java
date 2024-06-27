@@ -227,7 +227,7 @@ public class Board implements Serializable{
         }
         sb.append("\n");
 
-        // Rows with labels and emojis
+        // Linhas com emojisz
         String[] letterEmojis = {"🅰", "🅱", "🅲️", "🅳️", "🅴️", "🅵️", "🅶️", "🅷️"};
         for (int row = 0; row < 8; row++) {
             sb.append(letterEmojis[row]).append(" ");
