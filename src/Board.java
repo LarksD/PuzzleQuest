@@ -170,11 +170,35 @@ public class Board implements Serializable{
     }
 
 
+    public boolean hasValidMove() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                // Tentar trocar com a peça à direita
+                if (j < 7) {
+                    swap(i, j, i, j + 1);
+                    if (lookForMatches(false) != 0) {
+                        swap(i, j, i, j + 1); // Desfazer a troca
+                        return true;
+                    }
+                    swap(i, j, i, j + 1); // Desfazer a troca
+                }
 
+                // Tentar trocar com a peça abaixo
+                if (i < 7) {
+                    swap(i, j, i + 1, j);
+                    if (lookForMatches(false) != 0) {
+                        swap(i, j, i + 1, j);
+                        return true;
+                    }
+                    swap(i, j, i + 1, j);
+                }
+            }
+        }
+        return false;
+    }
 
-    private void shuffleBoard() {
-        // dar shuffle até que não haja combos
-        while (lookForMatches(false) != 0) {
+    public void shuffleBoard() {
+        do {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     int x = random.nextInt(8);
@@ -182,7 +206,7 @@ public class Board implements Serializable{
                     swap(i, j, x, y);
                 }
             }
-        }
+        } while (!hasValidMove() || lookForMatches(false) != 0);
     }
 
     public void swap(int x1, int y1, int x2, int y2) { // reponsavel por trocar as peças de lugar

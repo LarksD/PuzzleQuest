@@ -29,7 +29,7 @@ public class Game implements Serializable { //Serializable para que o jogo possa
             System.out.print("Escolha uma opção: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -63,6 +63,7 @@ public class Game implements Serializable { //Serializable para que o jogo possa
         player1.reset();
         player2.reset();
         board.initialize();
+        firstTurn = true;
         playGame();
     }
 
@@ -152,6 +153,7 @@ public class Game implements Serializable { //Serializable para que o jogo possa
                 break;
             } else {
                 System.out.println("Move invalido. Tente Novamente.");
+                System.out.println(board);
             }
         }
 
@@ -168,6 +170,10 @@ public class Game implements Serializable { //Serializable para que o jogo possa
             System.out.println("Jogada Extra!");
             System.out.println(board); //print o tabuleiro com as peças trocadas
             takeTurn(player);
+        }
+
+        if (!board.hasValidMove()) {
+            board.shuffleBoard();
         }
 
         if (saveGame()) { // salvar o jogo a cada jogada
@@ -207,7 +213,8 @@ public class Game implements Serializable { //Serializable para que o jogo possa
         }
     }
 
-    private boolean isValidMove(int x, int y, int direction) { //verificar se o movimento é válido dentro do tabuleiro
+    private boolean isValidMove(int x, int y, int direction) {
+        // Verificar se a posição é válida
         if (x < 0 || x >= 8 || y < 0 || y >= 8) {
             return false;
         }
@@ -234,7 +241,17 @@ public class Game implements Serializable { //Serializable para que o jogo possa
             return false;
         }
 
-        return true;
+        // Simular a troca de peças
+        board.swap(x, y, targetX, targetY);
+
+        // Procurar por combinações
+        boolean hasMatch = board.lookForMatches(false) != 0;
+
+        // Reverter a troca
+        board.swap(x, y, targetX, targetY);
+
+        // Retornar se a troca é válida
+        return hasMatch;
     }
 
     private void makeMove(int x, int y, int direction) { //fazer o movimento atraves de troca de peças
