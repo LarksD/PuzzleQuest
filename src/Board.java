@@ -117,7 +117,7 @@ public class Board implements Serializable{
                     matchLength++;
                 }
                 if (matchLength > 3) {
-                    System.out.println("Match of " + matchLength + " at (" + row + ", " + col + ")");
+                    //System.out.println("Match of " + matchLength + " at (" + row + ", " + col + ")");
                     if (calc) {
                         calculos(matchLength, current, game);
                         quebrar(row, col, matchLength, 0);
@@ -125,7 +125,7 @@ public class Board implements Serializable{
                     return 2;
                 }
                 if (matchLength == 3) {
-                    System.out.println("Match of " + matchLength + " at (" + row + ", " + col + ")");
+                    //System.out.println("Match of " + matchLength + " at (" + row + ", " + col + ")");
 
                     if (calc) {
                         calculos(matchLength, current, game);
@@ -146,7 +146,7 @@ public class Board implements Serializable{
                     matchLength++;
                 }
                 if (matchLength > 3) {
-                    System.out.println("Match of " + matchLength + " at (" + row + ", " + col + ")");
+                    //System.out.println("Match of " + matchLength + " at (" + row + ", " + col + ")");
 
                     if (calc) { //se for pra quebrar e lidar com efeitos
                         calculos(matchLength, current, game);
@@ -155,7 +155,7 @@ public class Board implements Serializable{
                     return 2;
                 }
                 if (matchLength == 3) {
-                    System.out.println("Match of " + matchLength + " at (" + row + ", " + col + ")");
+                    //System.out.println("Match of " + matchLength + " at (" + row + ", " + col + ")");
 
                     if (calc) {
                         calculos(matchLength, current, game);
@@ -237,5 +237,6 @@ public class Board implements Serializable{
             sb.append("\n");
         }
         return sb.toString();
+
     }
 }

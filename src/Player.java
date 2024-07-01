@@ -17,6 +17,8 @@ public class Player implements Serializable{
         this.health = 55;
         this.gold = 0;
         this.experience = 0;
+        this.maxHealth = 55;
+        this.doubleDamage = false;
     }
 
     public void setDoubleDamage(boolean doubleDamage) {

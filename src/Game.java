@@ -9,6 +9,7 @@ public class Game implements Serializable { //Serializable para que o jogo possa
     private transient Scanner scanner; //transient para que o scanner não seja serializado
     private boolean isPlayer1Turn;
 
+
     public Game() {
         scanner = new Scanner(System.in); //inicializar o scanner pois ele não é serializado
         board = new Board(this);
@@ -29,17 +30,23 @@ public class Game implements Serializable { //Serializable para que o jogo possa
             System.out.print("Escolha uma opção: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consumir o next line
 
             switch (choice) {
                 case 1:
                     newGame();
                     break;
                 case 2:
-                    loadGame();
+                    String loadFilename = selectGame();
+                    if (loadFilename != null) {
+                        loadGame(loadFilename);
+                    }
                     break;
                 case 3:
-                    deleteSavedGame();
+                    String deleteFilename = selectGame();
+                    if (deleteFilename != null) {
+                        deleteSavedGame(deleteFilename);
+                    }
                     break;
                 case 4:
                     System.out.println("Saindo do jogo. Até a próxima!");
@@ -69,8 +76,8 @@ public class Game implements Serializable { //Serializable para que o jogo possa
 
 
 
-    private void loadGame() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("jogosalvo.dat"))) {
+    private void loadGame(String filename) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
             Game loadedGame = (Game) ois.readObject();
             this.player1 = loadedGame.player1;
             this.player2 = loadedGame.player2;
@@ -82,17 +89,19 @@ public class Game implements Serializable { //Serializable para que o jogo possa
         }
     }
 
-    private void deleteSavedGame() {
-        File saveFile = new File("jogosalvo.dat");
+    private void deleteSavedGame(String filename) {
+        File saveFile = new File(filename);
         if (saveFile.exists() && saveFile.delete()) {
             System.out.println("Jogo salvo excluido com sucesso.");
         } else {
-            System.out.println("Nenhum jogo salvo encontrado.");
+            System.out.println("Falha ao excluir jogo salvo.");
         }
     }
 
+
     private boolean saveGame() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("jogosalvo.dat"))) {
+        String filename = player1.getName() + " vs " + player2.getName() + ".dat";
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(this);
             return true;
         } catch (IOException e) {
@@ -119,11 +128,40 @@ public class Game implements Serializable { //Serializable para que o jogo possa
                 System.out.println(board);
                 firstTurn = false;
             }
-            if (!takeTurn(player1)) break;
+            if (takeTurn(player1)) break;
             System.out.println(board);  // print o tabuleiro depois da jogada do jogador 1
-            if (!takeTurn(player2)) break;
+            if (takeTurn(player2)) break;
             System.out.println(board);  // print o tabuleiro depois da jogada do jogador 2
         }
+    }
+
+    private String selectGame() {
+        File folder = new File(".");
+        File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".dat"));
+
+        if (listOfFiles.length == 0) {
+            System.out.println("Nenhum jogo encontrado.");
+            return null;
+        }
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            System.out.println((i + 1) + ". " + listOfFiles[i].getName());
+        }
+
+        System.out.println("Selecione o jogo informando o número correspondente ou 0 para cancelar:");
+        int gameNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (gameNumber == 0) {
+            return null;
+        }
+
+        if (gameNumber < 1 || gameNumber > listOfFiles.length) {
+            System.out.println("Seleção inválida. Tente novamente.");
+            return selectGame();
+        }
+
+        return listOfFiles[gameNumber - 1].getName();
     }
 
     private boolean takeTurn(Player player) {
@@ -152,7 +190,7 @@ public class Game implements Serializable { //Serializable para que o jogo possa
             if (x != -1 && y != -1 && isValidMove(x, y, direction)) {
                 break;
             } else {
-                System.out.println("Move invalido. Tente Novamente.");
+                System.out.println("Movimento invalido. Tente Novamente.");
                 System.out.println(board);
             }
         }
@@ -273,10 +311,11 @@ public class Game implements Serializable { //Serializable para que o jogo possa
 
     private boolean checkGameOver(Player player) {
         Player opponent = getOpponent(player);
-        if (player.getHealth() <= 0 || opponent.getHealth() <= 0) {   //verificar se a vida do jogador ou do oponente é menor ou igual a 0
-            System.out.println(player.getName() + " foi derrotado!");
-            return false;
+        if (opponent.getHealth() <= 0) {
+            System.out.println("Parabéns " + player.getName() + "! Você venceu!");
+            return true;
         }
-        return true;
+
+        return false;
     }
 }
