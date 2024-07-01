@@ -94,16 +94,17 @@ public class Board implements Serializable{
                 tiles[row + i][col] = null;
             }
             // Mover as peças para baixo
-            for (int i = row + length - 1; i >= length; i--) {
-                tiles[i][col] = tiles[i - length][col];
-            }
-            // Gerar novas peças no topo
-            for (int i = 0; i < length; i++) {
-                tiles[i][col] = new Tile(random.nextInt(7));
+            for (int i = row + length - 1; i >= 0; i--) {
+                if (i >= length) {
+                    tiles[i][col] = tiles[i - length][col];
+                } else {
+                    tiles[i][col] = new Tile(random.nextInt(7));
+                }
             }
         }
-        lookForMatches(true); //chamar lookForMatches para verificar se há novos combos
+        lookForMatches(true); // chamar lookForMatches para verificar se há novos combos
     }
+
 
 
     public int lookForMatches(boolean calc) { //usando int em vez de boolean para retornar 0, 1 ou 2
@@ -227,7 +228,7 @@ public class Board implements Serializable{
         }
         sb.append("\n");
 
-        // Linhas com emojisz
+        // Linhas com emojis
         String[] letterEmojis = {"🅰", "🅱", "🅲️", "🅳️", "🅴️", "🅵️", "🅶️", "🅷️"};
         for (int row = 0; row < 8; row++) {
             sb.append(letterEmojis[row]).append(" ");
