@@ -1,6 +1,5 @@
-# Puzzle Quest
+# Puzzle Quest - Um Trabalho para a minha faculdade
 
-# Trabalho para a minha faculdade
 
 O Puzzle Quest é um jogo baseado em Java em que os jogadores se revezam para combinar peças em um tabuleiro. O jogo apresenta uma variedade de tipos de peças, cada uma com seu próprio efeito exclusivo no estado do jogo.
 
