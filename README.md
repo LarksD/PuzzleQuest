@@ -1,31 +1,31 @@
-# Puzzle Quest - Um Trabalho para a minha faculdade
+# Puzzle Quest - A college project
 
 
-O Puzzle Quest é um jogo baseado em Java em que os jogadores se revezam para combinar peças em um tabuleiro. O jogo apresenta uma variedade de tipos de peças, cada uma com seu próprio efeito exclusivo no estado do jogo.
+This is a Java-based game in which players take turns matching pieces on a board. The game features a variety of piece types, each with its own unique effect on the game state.
 
-## Recursos
+## Features
 
-- Jogo para dois jogadores com mecânica baseada em turnos.
-- Diferentes tipos de peças (caveira, vermelha, azul, verde, amarela, dourada, experiência) com efeitos exclusivos.
-- Capacidade de salvar e carregar o estado do jogo.
-- Capacidade de excluir um estado de jogo salvo.
-- O estado do jogo é salvo após cada turno.
+- Two-player game with turn-based mechanics.
+- Different types of pieces (skull, red, blue, green, yellow, gold, experience) with unique effects.
+- Ability to save and load the game state.
+- Ability to delete a saved game state.
+- The game state is saved after each turn.
 
 ## Classes
 
-- `Game`: A classe principal que controla o fluxo do jogo.
-- `Player`: Representa um jogador no jogo.
-- `Tile`: Representa uma peça no tabuleiro do jogo.
-- `Board`: Representa o tabuleiro do jogo.
-- `PuzzleQuestMain`: O ponto de entrada do aplicativo.
+- `Game`: The main class that controls the flow of the game.
+- `Player`: Represents a player in the game.
+- `Tile`: Represents a piece on the game board.
+- `Board`: Represents the game board.
+- `PuzzleQuestMain`: The entry point of the application.
 
-## Como executar
+## How to run
 
-Para executar o jogo, execute a classe `PuzzleQuestMain`.
+To run the game, execute the `PuzzleQuestMain` class.
 
-## Como jogar
+## How to play
 
-1. Inicie um novo jogo ou carregue um jogo salvo anteriormente.
-2. Os jogadores se revezam para trocar peças adjacentes no tabuleiro e formar uma combinação de pelo menos três peças semelhantes.
-3. Cada tipo de peça tem um efeito exclusivo no estado do jogo.
-4. O jogo termina quando a saúde de um jogador chega a zero.
+1. start a new game or load a previously saved game.
+2. Players take turns swapping adjacent pieces on the board to form a combination of at least three similar pieces.
+3. Each type of piece has a unique effect on the game state.
+4. The game ends when a player's health reaches zero.
